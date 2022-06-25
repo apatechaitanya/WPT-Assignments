@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(() => {
+            $('#add').click(() => {
+                let input = {
+                    itemno: $('#itemno').val(),
+                    itemname: $('#itemname').val(),
+                    price: $('#price').val(),
+                    category: $('#category').val()
+                };
+                let paramsItem = {
+                    data: input,
+                    url: "http://localhost:400/itemdetails",
+                    type: "get",
+                    dataType: "json",
+                    success: (datagivenbyserver) => {
+                        console.log(
+                            "data given by server in success " + datagivenbyserver.status
+                        );
+                        if (datagivenbyserver.status === true) {
+                            $("#msg").text("successful inserted");
+                        } else {
+                            $("#msg").text("Enter wrong value");
+                        }
+
+                    },
+                    error: (errorgivenbyserver) => {
+                        console.log(
+                            "fialed to contact data " + errorgivenbyserver.status
+                        );
+                    },
+                };
+                console.log("is function working");
+                $.ajax(paramsItem);
+            });
+
+            // update
+            $('#update').click(() => {
+                let updateinput = {
+                    itemno: $('#itemno').val(),
+                    itemname: $('#itemname').val(),
+                    price: $('#price').val(),
+                    category: $('#category').val()
+                };
+                let paramsItem = {
+                    data: updateinput,
+                    url: "http://localhost:400/updateitemdetails",
+                    type: "get",
+                    dataType: "json",
+                    success: (datagivenbyserver) => {
+                        console.log(
+                            "data given by server in success " + datagivenbyserver.status
+                        );
+                        if (datagivenbyserver.status === true) {
+                            $("#msg").text("successful updated");
+
+                        } else {
+                            $("#msg").text("Not able to update");
+                        }
+
+                    },
+                    error: (errorgivenbyserver) => {
+                        console.log(
+                            "fialed to contact data " + errorgivenbyserver.status
+                        );
+                    },
+                };
+                console.log("is function working");
+                $.ajax(paramsItem);
+            });
+
+            //multiple
+            $('#btncategory').click(() => {
+                let allinput = {
+                    category: $('#category').val()
+                };
+                let content=""
+                let allItem = {
+                    data: allinput,
+                    url: "http://localhost:400/multiple",
+                    type: "get",
+                    dataType: "json",
+                    success: (datagivenbyserver) => {
+                        // console.log(
+                        //     "data given by server in success " + datagivenbyserver.status
+                        // );
+                        // if (datagivenbyserverr.status === true) {
+                        for(let i=0;i<datagivenbyserver.length;i++){
+                            content+=datagivenbyserver[i].itemno+" "+datagivenbyserver[i].itemname+" "+datagivenbyserver[i].price+
+                            " "+datagivenbyserver[i].category+"<br>";
+                        }
+                    
+                        // if (datagivenbyserver.status === true) {
+                            $("#msg").html(content);  
+                        // } else {
+                        //     $("#msg").text("Item not found");
+                        // }
+
+                    },
+                    error: (errorgivenbyserver) => {
+                        console.log(
+                            "fialed to contact data " + errorgivenbyserver.status
+                        );
+                    },
+                };
+                console.log("is function working");
+                $.ajax(allItem);
+            });
+            // single select
+             $('#btnitemno').click(() => {
+                let input = {
+                    itemno: $('#itemno').val()
+                };
+                let singleItem = {
+                    data: input,
+                    url: "http://localhost:400/single",
+                    type: "get",
+                    dataType: "json",
+                    success: (datagivenbyserver) => {
+                        console.log(
+                            "data given by server in success " + datagivenbyserver.status
+                        );
+                        if (datagivenbyserver.status === true) {
+                            $("#msg").text(JSON.stringify(datagivenbyserver.itemdetails.itemno+" "+datagivenbyserver.itemdetails.itemname+" "
+                            +" "+datagivenbyserver.itemdetails.price+" "+datagivenbyserver.itemdetails.category))
+                        } else {
+                            $("#msg").text("Item not found");
+                        }
+
+                    },
+                    error: (errorgivenbyserver) => {
+                        console.log(
+                            "fialed to contact data " + errorgivenbyserver.status
+                        );
+                    },
+                };
+                console.log("is function working");
+                $.ajax(singleItem);
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <input type="text" id="itemno" name="itemno" placeholder="Enter item number" required>
+    <br /> <input type="text" id="itemname" name="itemname" placeholder="Enter item name" required>
+    <br /><input type="text" id="price" name="price" placeholder="Enter item price" required>
+    <br /> <input type="text" id="category" name="category" placeholder="Enter item category" required>
+    <br /> <button id="add">add</button> <button id="update">update</button>
+    <button id="btncategory">Serch by category</button>
+    <button id="btnitemno">Serach by itemno</button>
+    <br>
+    <span id="msg"></span>
+    <span id="msg1"></span>
+</body>
+
+</html>

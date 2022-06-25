@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+     <script>
+        $(()=>{
+            $('#resadd').click(()=>{
+                let input = {
+                    resid: $('#resid').val(),
+                    resname: $('#resname').val(),
+                    resstatus: $('#resstatus').val()
+                };
+                let paramsItem = {
+                    data: input,
+                    url: "http://localhost:400/insertResource",
+                    type: "get",
+                    dataType: "json",
+                    success: (datagivenbyserver) => {
+                        console.log(
+                            "data given by server in success " + datagivenbyserver.status
+                        );
+                        if (datagivenbyserver.status === true) {
+                            $("#msg").text("successful inserted");
+                        } else {
+                            $("#msg").text("Enter wrong value");
+                        }
+
+                    },
+                    error: (errorgivenbyserver) => {
+                        console.log(
+                            "fialed to contact data " + errorgivenbyserver.status
+                        );
+                    },
+                };
+                $.ajax(paramsItem);
+            });
+
+            //update
+            $('#resupdate').click(()=>{
+                let input = {
+                    resid: $('#resid').val(),
+                    resname: $('#resname').val(),
+                    resstatus: $('#resstatus').val()
+                };
+                let updateResource = {
+                    data: input,
+                    url: "http://localhost:400/updateResource",
+                    type: "get",
+                    dataType: "json",
+                    success: (datagivenbyserver) => {
+                        console.log(
+                            "data given by server in success " + datagivenbyserver.status
+                        );
+                        if (datagivenbyserver.status === true) {
+                            $("#msg").text("successful updated");
+                        } else {
+                            $("#msg").text("Enter wrong value");
+                        }
+
+                    },
+                    error: (errorgivenbyserver) => {
+                        console.log(
+                            "fialed to contact data " + errorgivenbyserver.status
+                        );
+                    },
+                };
+                $.ajax(updateResource);
+            });
+            //multiple
+            $('#resStatus').click(() => {
+                let resinput = {
+                    resstatus: $('#resstatus').val()
+                };
+                let content=""
+                let searchStatus = {
+                    data: resinput,
+                    url: "http://localhost:400/mulResource",
+                    type: "get",
+                    dataType: "json",
+                    success: (datagivenbyserver) => {
+                        for(let i=0;i<datagivenbyserver.length;i++){
+                            content+=datagivenbyserver[i].resid+" "+datagivenbyserver[i].resname
+                            +" "+datagivenbyserver[i].resstatus+"<br>";
+                        }
+                       $("#msg").html(content);  
+                    },
+                    error: (errorgivenbyserver) => {
+                        console.log(
+                            "fialed to contact data " + errorgivenbyserver.status
+                        );
+                    },
+                };
+                console.log("is function working");
+                $.ajax(searchStatus);
+            });
+        });
+     </script>
+</head>
+<body>
+    <input id="resid" name="resid" placeholder="Enter resource id"><br>
+    <input id="resname" name="resname" placeholder="Enter resource name"><br>
+    <input id="resstatus" name="resstatus" placeholder="Enter resource status"><br>
+     <br /> <button id="resadd">add</button> <button id="resupdate">update</button>
+    <button id="resStatus">Serch by status</button>
+    <button id="resourceID">Serach by resource id</button><br>
+    <span id="msg"></span>
+</body>
+</html>

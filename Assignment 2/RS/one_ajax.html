@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(() => {
+      $("#loginbutton").click(() => {
+        let input = {
+          username: $("#username").val(),
+          password: $("#password").val(),
+        };
+        let parameterstothefunction = {
+          data: input,
+          url: "http://localhost:900/login",
+          type: "get",
+          dataType: "json",
+          success: (datagivenbyserver) => {
+            console.log(
+              "data given by server in success " + datagivenbyserver.status
+            );
+            if (datagivenbyserver.status === true) {
+              $("#msg").text("successful login");
+              window.location = "https://chaitanya-ankita-hiteshh.netlify.app/"
+            } else {
+              $("#msg").text("userid or password wrong");
+              $("#username").val("")
+              $("#password").val("")
+            }
+          },
+          error: (errorgivenbyserver) => {
+            console.log(
+              "fialed to contact data " + errorgivenbyserver.status
+            );
+          },
+        };
+        console.log("is the function working");
+
+        $.ajax(parameterstothefunction);
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <br /><input type="text" id="username" name="username" placeholder="username" />
+  <br /><input type="password" id="password" name="password" placeholder="password" /><br>
+  <button id="loginbutton">login</button>
+  <p id="msg"></p>
+</body>
+
+</html>

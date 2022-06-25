@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(() => {
+            $('#pincode').blur(() => {
+                let i = $('#pincode');
+                let input = {
+                    pincode: i.val()
+                };
+                let paramsItem = {
+                    data: input,
+                    url: "http://localhost:900/getAreaDetails",
+                    type: "get",
+                    dataType: "json",
+                    success: (datagivenbyserver) => {
+                        console.log(
+                            "data given by server in success " + datagivenbyserver.status
+                        );
+                        if (datagivenbyserver.status === true) {
+                            $("#msg").addClass('g');
+                            $("#msg").removeClass('r');
+                            $("#msg").text("Successfuly Found");
+                            $('#areaname').val(datagivenbyserver.areadetails.areaname)
+                        } else {
+                            $("#msg").addClass('r');
+                            $("#msg").removeClass('g');
+                            $("#msg").text("Enter wrong value");
+                            $('#areaname').val("")
+                        }
+                    },
+                    error: (errorgivenbyserver) => {
+                        console.log(
+                            "fialed to contact data " + errorgivenbyserver.status
+                        );
+                    },
+                };
+                $.ajax(paramsItem);
+            });
+        });
+    </script>
+    <style>
+        .g{
+            color: green;
+        }
+        .r{
+            color: crimson;
+        }
+    </style>
+</head>
+
+<body>
+    Pincode : <input id="pincode" name="pincode" placeholder="Enter pincode">
+    Area : <input id="areaname" name="areaname" ><br>
+    Result Will be here : <span id="msg"></span>
+</body>
+
+</html>
